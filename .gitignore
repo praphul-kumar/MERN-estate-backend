@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# client folders
+.env
 
+# client folders
 client
