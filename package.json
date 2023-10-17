@@ -1,0 +1,16 @@
+{
+  "name": "mern-estate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "backend/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node backend/index.js",
+    "dev": "nodemon backend/index.js"
+  },
+  "author": "Praphul",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
