@@ -1,32 +1,23 @@
 import { saveUser } from "../services/auth.service.js";
 import bcryptjs from 'bcryptjs';
+import { errorHandler } from "../utils/error.js";
 
-export const signUp = async (req, res) => {
-    let response = null;
-    let statusCode = 500;
-
+export const signUp = async (req, res, next) => {
     const {name, phone, email, password} = req.body;
 
     try {
         const hashedPassword  = bcryptjs.hashSync(password, 10);
         const user = await saveUser({name, phone, email, password: hashedPassword});
     
-        if (user != null) {
-            statusCode = 201;
-            response = {
+        if (user == null) {
+            res.status(201).json({
                 message : "User Created Successfully!!",
                 user: user
-            };
+            });
         } else {
-            response = {
-                message : "Failed to create User!!"
-            };
+            throw errorHandler(500, "Failed to create User on Server");
         }
     } catch (error) {
-        response = {
-            message: error.message
-        };
+        next(error);
     }
-
-    res.status(statusCode).json(response);
 }
