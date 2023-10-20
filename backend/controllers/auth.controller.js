@@ -1,6 +1,9 @@
 import { findOneWithEmail, saveUser } from "../services/auth.service.js";
 import bcryptjs from 'bcryptjs';
 import { errorHandler } from "../utils/error.js";
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const signUp = async (req, res, next) => {
     const {name, phone, email, password} = req.body;
@@ -10,10 +13,12 @@ export const signUp = async (req, res, next) => {
         const user = await saveUser({name, phone, email, password: hashedPassword});
     
         if (user != null) {
+            const {password: pass, ...userWithoutPass} = user._doc;
+            
             res.status(201).json({
                 success: true,
                 message : "User Created Successfully!!",
-                user: user
+                user: userWithoutPass
             });
         } else {
             throw errorHandler(500, "Failed to create User on Server");
@@ -31,11 +36,15 @@ export const signIn = async (req, res, next) => {
     
         if (user != null) {
             if (bcryptjs.compareSync(password, user.password)) {
-                console.log('Login Success!!');
-                res.status(201).json({
+                const access_token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
+
+                const {password: pass, ...userWithoutPass} = user._doc;
+
+                res.cookie('access_token', access_token, { httpOnly: true })
+                .status(201).json({
                     success: true,
                     message : "Login Successfully!!",
-                    user: user
+                    user: userWithoutPass
                 });
 
             } else {
