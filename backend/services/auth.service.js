@@ -15,3 +15,12 @@ export const saveUser = async (user) => {
         throw error;
     }
 }
+
+export const findOneWithEmail = async (email) => {
+    try {
+        return await User.findOne({email});
+
+    } catch(error) {
+        throw error;
+    }
+}
