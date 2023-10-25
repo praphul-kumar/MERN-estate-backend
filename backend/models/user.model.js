@@ -19,7 +19,7 @@ const userSchema  = new mongoose.Schema({
         type: String, 
         required: true
     },
-    photo: {
+    avatar: {
         type: String,
         default: "https://lh3.googleusercontent.com/a/ACg8ocJU2UN3kHiH4C9MqLN3qqEWYXredBOV_7_-a_KAcX3w=s96-c"
     }

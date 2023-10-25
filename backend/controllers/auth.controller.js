@@ -62,7 +62,7 @@ export const signIn = async (req, res, next) => {
 
 export const googleSignIn = async (req, res, next) => {
     
-    const {name, email, phone, photo} = req.body;
+    const {name, email, phone, avatar} = req.body;
 
     try {
         const user = await userService.findOneWithEmail(email);
@@ -84,7 +84,7 @@ export const googleSignIn = async (req, res, next) => {
 
             const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
             
-            const user = await userService.saveUser({name, phone, email, password: hashedPassword, photo});
+            const user = await userService.saveUser({name, phone, email, password: hashedPassword, avatar});
         
             if (user != null) {
                 const {password: pass, ...userWithoutPass} = user._doc;
