@@ -8,8 +8,7 @@ const userSchema  = new mongoose.Schema({
     phone: {
         type: String,
         length: 10,
-        unique: true,
-        required: true
+        unique: true
     },
     email: {
         type: String,
@@ -19,6 +18,10 @@ const userSchema  = new mongoose.Schema({
     password: {
         type: String, 
         required: true
+    },
+    photo: {
+        type: String,
+        default: "https://lh3.googleusercontent.com/a/ACg8ocJU2UN3kHiH4C9MqLN3qqEWYXredBOV_7_-a_KAcX3w=s96-c"
     }
 }, {timestamps: true});
 
