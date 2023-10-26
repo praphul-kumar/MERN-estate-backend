@@ -14,9 +14,12 @@ export const signUp = async (req, res, next) => {
         const user = await userService.saveUser({name, phone, email, password: hashedPassword});
     
         if (user != null) {
+            const access_token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
+
             const {password: pass, ...userWithoutPass} = user._doc;
             
-            res.status(201).json({
+            res.cookie('access_token', access_token, { httpOnly: true })
+            .status(201).json({
                 success: true,
                 message : "User Created Successfully!!",
                 user: userWithoutPass
@@ -87,9 +90,11 @@ export const googleSignIn = async (req, res, next) => {
             const user = await userService.saveUser({name, phone, email, password: hashedPassword, avatar});
         
             if (user != null) {
+                const access_token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
+
                 const {password: pass, ...userWithoutPass} = user._doc;
                 
-                res.status(201).json({
+                res.cookie('access_token', access_token, {httpOnly: true}).status(201).json({
                     success: true,
                     message : "User Created Successfully!!",
                     user: userWithoutPass

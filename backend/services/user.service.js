@@ -39,6 +39,14 @@ export const updateUser = async (id, data) => {
   }
 };
 
+export const deleteUser = async (id) => {
+    try {
+        return await User.findByIdAndDelete(id);
+    } catch(error) {
+        throw error;
+    }
+}
+
 export const findOneWithEmail = async (email) => {
   try {
     return await User.findOne({ email });

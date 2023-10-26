@@ -9,11 +9,12 @@ export const  test = (req, res) => {
 }
 
 export const updateUser = async (req, res, next) => {
-    if (req.user.id != req.params.id ) {
-        throw errorHandler(403, "Unauthorized");
-    }
-
+    
     try {
+        if (req.user.id != req.params.id ) {
+            throw errorHandler(403, "Unauthorized");
+        }
+
         if (req.body.password) {
             req.body.password = bcrypt.hashSync(req.body.password, 10);
         }
@@ -36,6 +37,26 @@ export const updateUser = async (req, res, next) => {
         } else {
             throw errorHandler(500, 'Unable to update User!!');
         }
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const deleteUser = async (req, res, next) => {
+
+    try {
+        if (req.user.id != req.params.id) {
+            throw errorHandler(403, 'Unauthorized User Access!!');
+        }
+
+        await userService.deleteUser(req.params.id);
+
+        res.clearCookie('access_token');
+        res.status(200).json({
+            success: true,
+            message: "User Removed Successfully!!"
+        });
 
     } catch (error) {
         next(error);
